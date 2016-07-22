@@ -53,5 +53,9 @@
   "babelBoilerplateOptions": {
     "entryFileName": "qti-parser.js",
     "mainVarName": "qtiParser"
+  },
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "jsdom": "^9.4.1"
   }
 }
