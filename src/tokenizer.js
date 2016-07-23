@@ -1,8 +1,14 @@
-// require("jsdom").env("", function(err, window) {
-//     if (err) {
-//         console.error(err);
-//         return;
-//     }
-//
-//     var $ = require("jquery")(window);
-// });
+import $ from 'jquery';
+
+export default class Tokenizer {
+  constructor(xml){
+    this.xml = $($.parseXML(xml)).find('*');
+    this.currentIndex = 0;
+  }
+
+  next(){
+    debugger;
+    return this.xml[this.currentIndex++];
+  }
+
+};
