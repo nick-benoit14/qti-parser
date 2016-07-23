@@ -203,10 +203,30 @@ describe('Parser', () => {
       expect(Object.keys(result.counts).length).equal(0);
       expect(result.input).equal(tokenizer);
     });
-    it('calls parse_topLevel', () => {
-      spy(Parser.prototype, 'parse_topLevel');
+  });
+
+  describe('parse_topLevel', () => {
+    it('calls parse with every item', () => {
+      var mock = {
+        parse: () => {}
+      };
+      spy(mock, 'parse');
       var result = new Parser(tokenizer);
-      expect(Parser.prototype.parse_topLevel).to.have.been.calledOnce;
+      result.parse_topLevel(mock.parse);
+
+      expect(mock.parse).to.have.been.callCount(115);
     });
+  });
+
+  describe('parse_atom', () => {
+    it('calls parse_questestinterop', () => {
+      var result = new Parser(tokenizer);
+      spy(Parser.prototype, 'parse_questestinterop');
+      try{
+        result.parse();
+      } catch(e){}
+      expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
+    });
+
   });
 });
