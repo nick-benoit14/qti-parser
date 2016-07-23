@@ -1,13 +1,9 @@
 import Tokenizer from './tokenizer';
 
 const qtiParser = {
-  greet() {
-    return 'hello';
-  },
-  Tokenizer
-
+  parse(xml) {
+    var a =  new Tokenizer(xml)
+  }
 };
 
-
-console.log("Howdy Do");
 export default qtiParser;

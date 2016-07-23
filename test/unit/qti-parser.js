@@ -1,6 +1,6 @@
 import qtiParser from '../../src/qti-parser';
 
-describe('qtiParser', () => {
+xdescribe('qtiParser', () => {
   describe('Greet function', () => {
     beforeEach(() => {
       spy(qtiParser, 'greet');

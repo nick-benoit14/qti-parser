@@ -7,7 +7,6 @@ export default class Tokenizer {
   }
 
   next(){
-    debugger;
     return this.xml[this.currentIndex++];
   }
 
