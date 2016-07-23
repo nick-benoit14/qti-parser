@@ -1,19 +1,34 @@
-import Tokenizer from 'tokenizer';
+import Tokenizer from './tokenizer';
 
-class Parser{
+export default class Parser{
   constructor(input){
     this.counts = {}
     this.input = input;
   }
 
-  parse_atom(){
-    var current = this.input.next();
-    switch (current.nodeName) {
-      case expression:
+  parse(){
+    this.parse_topLevel(() => this.parse_atom());
+  }
 
+  parse_topLevel(parse){
+    var qti = [];
+    while(this.current = this.input.next()){
+      qti.push(parse());
+    }
+
+    return {
+      type:"qti",
+      qti
+    };
+  }
+
+  parse_atom(){
+    switch (this.current.type) {
+      case 'questestinterop':
+        return this.parse_questestinterop();
         break;
       default:
-
+       throw new Error(`${this.current.type} is not yet supported!`);
     }
   }
 
@@ -30,5 +45,3 @@ class Parser{
   parse_item(){}
 
 };
-
-//parse_toplevel --> parse_atom --> [
