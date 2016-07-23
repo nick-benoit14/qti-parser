@@ -203,32 +203,31 @@ describe('Tokenizer', () => {
       var subject = new Tokenizer(fixture);
       expect(subject.currentIndex).equal(0);
     });
+  });
+  describe('next', () => {
+    it('handles empty returns next element', () => {
+      var tokenizer = new Tokenizer(fixture);
+      var result = tokenizer.next();
 
-    describe('next', () => {
-      it('handles empty returns next element', () => {
-        var tokenizer = new Tokenizer(fixture);
-        var result = tokenizer.next();
+      expect(result.type).equal('questestinterop');
+    });
 
-        expect(result.type).equal('questestinterop');
-      });
+    it('increments currentIndex', () => {
+      var tokenizer = new Tokenizer(fixture);
 
-      it('increments currentIndex', () => {
-        var tokenizer = new Tokenizer(fixture);
+      expect(tokenizer.currentIndex).equal(0);
+      tokenizer.next();
+      expect(tokenizer.currentIndex).equal(1);
+    });
 
-        expect(tokenizer.currentIndex).equal(0);
-        tokenizer.next();
-        expect(tokenizer.currentIndex).equal(1);
-      });
+    it('returns undefined when we are out of elements', () => {
+      var tokenizer = new Tokenizer(fixture);
 
-      it('returns undefined when we are out of elements', () => {
-        var tokenizer = new Tokenizer(fixture);
-
-        for(var i = 0; i < tokenizer.xml.length; i++){
-          expect(tokenizer.next()).not.equal(undefined);
-        }
-        var result = tokenizer.next();
-        expect(result).equal(undefined);
-      });
+      for(var i = 0; i < tokenizer.xml.length; i++){
+        expect(tokenizer.next()).not.equal(undefined);
+      }
+      var result = tokenizer.next();
+      expect(result).equal(undefined);
     });
   });
 
