@@ -1,5 +1,9 @@
 import Tokenizer from './tokenizer';
 
+export const Grammar = {
+  questestinterop: 'questestinterop'
+}
+
 export default class Parser{
   constructor(input){
     this.counts = {}
@@ -24,7 +28,7 @@ export default class Parser{
 
   parse_atom(){
     switch (this.current.type) {
-      case 'questestinterop':
+      case Grammar.questestinterop:
         return this.parse_questestinterop();
         break;
       default:
@@ -32,7 +36,15 @@ export default class Parser{
     }
   }
 
-  parse_questestinterop(){}
+  parse_questestinterop(){
+    // Find matching pair
+    // while() valid element do things
+    var questestinterop = {
+      type:Grammar.questestinterop,
+
+    };
+    return {};
+  }
 
   parse_assessment(){
     return {
