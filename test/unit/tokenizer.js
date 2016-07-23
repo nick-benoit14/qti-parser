@@ -209,7 +209,7 @@ describe('Tokenizer', () => {
         var tokenizer = new Tokenizer(fixture);
         var result = tokenizer.next();
 
-        expect(result.nodeName).equal('questestinterop');
+        expect(result.type).equal('questestinterop');
       });
 
       it('increments currentIndex', () => {

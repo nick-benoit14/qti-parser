@@ -7,7 +7,18 @@ export default class Tokenizer {
   }
 
   next(){
-    return this.xml[this.currentIndex++];
+    var rawToken = this.xml[this.currentIndex++];
+    if(!rawToken) return;
+
+    var token = {
+      type: rawToken.nodeName,
+      attributes:{}
+    };
+
+    for(var i = 0; i < rawToken.attributes.length; i++){
+      token.attributes[rawToken.attributes.item(i).name] = rawToken.attributes.item(i).value;
+    }
+    return token;
   }
 
 };
