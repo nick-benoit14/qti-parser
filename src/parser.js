@@ -6,9 +6,10 @@ export const Grammar = {
   text: '#text',
   assessment: 'assessment',
   qtimetadata: 'qtimetadata',
-  section: 'section'
-
-}
+  section: 'section',
+  item: 'item',
+  itemmetadata: 'itemmetadata'
+};
 
 export default class Parser{
   constructor(qti){
@@ -44,6 +45,10 @@ export default class Parser{
       case Grammar.qtimetadata:
         break;
       case Grammar.section:
+        return this.parse_section(current);
+        break;
+      case Grammar.item:
+        return this.parse_item(current);
         break;
       default:
         debugger;
@@ -70,7 +75,22 @@ export default class Parser{
 
     return assessment;
   }
-  parse_section(){}
-  parse_item(){}
+
+  parse_section(current){
+    var tokens = new Tokenizer(current.childNodes);
+    var section = tokens.each((val) => this.parse_atom(val));
+    section.type = Grammar.section;
+
+    return section;
+  }
+
+  parse_item(current){
+    var tokens = new Tokenizer(current.childNodes);
+    var item = tokens.each((val) => this.parse_atom(val));
+    item.type = Grammar.item;
+    debugger;
+
+    return item;
+  }
 
 };
