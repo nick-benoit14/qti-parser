@@ -21,7 +21,7 @@ export default class Parser{
 
   parse_topLevel(parse){
     var qti = [];
-    
+
     while(this.current){
       qti.push(parse());
 
@@ -35,7 +35,7 @@ export default class Parser{
   }
 
   parse_atom(){
-    switch (this.current.type) {
+    switch (this.current.nodeName) {
       case Grammar.questestinterop:
         return this.parse_questestinterop();
         break;

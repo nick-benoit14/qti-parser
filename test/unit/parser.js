@@ -224,15 +224,15 @@ describe('Parser', () => {
     });
   });
 
-  // describe('parse_atom', () => {
-  //   it('calls parse_questestinterop', () => {
-  //     var result = new Parser(tokenizer);
-  //     spy(Parser.prototype, 'parse_questestinterop');
-  //     try{
-  //       result.parse();
-  //     } catch(e){}
-  //     expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
-  //   });
-  //
-  // });
+  describe('parse_atom', () => {
+    it('calls parse_questestinterop', () => {
+      var result = new Parser(fixture);
+      spy(Parser.prototype, 'parse_questestinterop');
+      try{
+        result.parse();
+      } catch(e){}
+      expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
+    });
+
+  });
 });
