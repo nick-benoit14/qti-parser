@@ -202,7 +202,6 @@ describe('Parser', () => {
       expect(Object.keys(result.counts).length).equal(0);
       expect(result.input.length).equal(1);
       expect(result.input[0].nodeName).equal(Grammar.questestinterop);
-      expect(result.current.nodeName).equal(Grammar.questestinterop);
     });
   });
 

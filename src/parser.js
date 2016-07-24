@@ -12,16 +12,16 @@ export default class Parser{
   }
 
   parse(){
-    this.parse_topLevel(() => this.parse_atom());
+    this.parse_topLevel((current) => this.parse_atom(current));
   }
 
   parse_topLevel(parse){
     var qti = [];
 
-    while(this.current){
-      qti.push(parse());
-
-      this.current = this.input[++this.currentIndex];
+    var tokens = new Tokenizer(this.input);
+    var current;
+    while(current = tokens.next()){
+      qti.push(parse(current));
     }
 
     return {
@@ -30,8 +30,8 @@ export default class Parser{
     };
   }
 
-  parse_atom(){
-    switch (this.current.nodeName) {
+  parse_atom(current){
+    switch (current.nodeName) {
       case Grammar.questestinterop:
         return this.parse_questestinterop();
         break;
