@@ -2,7 +2,9 @@ import $ from 'jquery';
 import Tokenizer from './tokenizer';
 
 export const Grammar = {
-  questestinterop: 'questestinterop'
+  questestinterop: 'questestinterop',
+  text: '#text',
+  assessment: 'assessment'
 }
 
 export default class Parser{
@@ -35,30 +37,22 @@ export default class Parser{
       case Grammar.questestinterop:
         return this.parse_questestinterop(current);
         break;
+      case Grammar.text:
+        break;
+      case Grammar.assessment:
+        break;
       default:
-       throw new Error(`${this.current.type} is not yet supported!`);
+        debugger;
+        throw new Error(`${this.current.type} is not yet supported!`);
     }
   }
 
   parse_questestinterop(current){
-    var questestinterop = {
-      type:Grammar.questestinterop,
-    };
-
     var tokens = new Tokenizer(current.childNodes);
-    var node;
+    var questestinterop = tokens.each((val) => this.parse_atom(val));
+    questestinterop.type = Grammar.questestinterop;
 
-    while(node = tokens.next()){
-      var val = parse_atom(node);
-      if(val.length > 0){
-        if(!questestinterop[node.nodeName]){
-          questestinterop[node.nodeName] = [];
-        }
-        questestinterop[node.nodeName].push(val);
-      }
-    }
-
-    return {};
+    return questestinterop;
   }
 
   parse_assessment(){
