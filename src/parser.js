@@ -1,23 +1,29 @@
+import $ from 'jquery';
 import Tokenizer from './tokenizer';
 
 export const Grammar = {
-  questestinterop: 'questestinterop'
+  questestinterop: 'questestinterop',
+  text: '#text',
+  assessment: 'assessment'
 }
 
 export default class Parser{
-  constructor(input){
+  constructor(qti){
     this.counts = {}
-    this.input = input;
+    this.input = $($.parseXML(qti))[0].childNodes;
   }
 
   parse(){
-    this.parse_topLevel(() => this.parse_atom());
+    this.parse_topLevel((current) => this.parse_atom(current));
   }
 
   parse_topLevel(parse){
     var qti = [];
-    while(this.current = this.input.next()){
-      qti.push(parse());
+
+    var tokens = new Tokenizer(this.input);
+    var current;
+    while(current = tokens.next()){
+      qti.push(parse(current));
     }
 
     return {
@@ -26,24 +32,27 @@ export default class Parser{
     };
   }
 
-  parse_atom(){
-    switch (this.current.type) {
+  parse_atom(current){
+    switch (current.nodeName) {
       case Grammar.questestinterop:
-        return this.parse_questestinterop();
+        return this.parse_questestinterop(current);
+        break;
+      case Grammar.text:
+        break;
+      case Grammar.assessment:
         break;
       default:
-       throw new Error(`${this.current.type} is not yet supported!`);
+        debugger;
+        throw new Error(`${this.current.type} is not yet supported!`);
     }
   }
 
-  parse_questestinterop(){
-    // Find matching pair
-    // while() valid element do things
-    var questestinterop = {
-      type:Grammar.questestinterop,
+  parse_questestinterop(current){
+    var tokens = new Tokenizer(current.childNodes);
+    var questestinterop = tokens.each((val) => this.parse_atom(val));
+    questestinterop.type = Grammar.questestinterop;
 
-    };
-    return {};
+    return questestinterop;
   }
 
   parse_assessment(){
