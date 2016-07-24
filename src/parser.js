@@ -8,7 +8,11 @@ export default class Parser{
   constructor(qti){
     this.counts = {}
     this.input = $($.parseXML(qti))[0].childNodes;
+    this.current = this.input[0];
   }
+
+//TODO abstract next 
+  next(){}
 
   parse(){
     this.parse_topLevel(() => this.parse_atom());

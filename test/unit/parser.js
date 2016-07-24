@@ -202,22 +202,28 @@ describe('Parser', () => {
       expect(Object.keys(result.counts).length).equal(0);
       expect(result.input.length).equal(1);
       expect(result.input[0].nodeName).equal(Grammar.questestinterop);
+      expect(result.current.nodeName).equal(Grammar.questestinterop);
     });
   });
 
-  // describe('parse_topLevel', () => {
-  //   it('calls parse with every item', () => {
-  //     var mock = {
-  //       parse: () => {}
-  //     };
-  //     spy(mock, 'parse');
-  //     var result = new Parser(tokenizer);
-  //     result.parse_topLevel(mock.parse);
-  //
-  //     expect(mock.parse).to.have.been.callCount(115);
-  //   });
-  // });
-  //
+  describe('next', () => {
+    var result = new Parser(fixture);
+    //TODO
+  });
+
+  xdescribe('parse_topLevel', () => {
+    it('calls parse with every item', () => {
+      var mock = {
+        parse: () => {}
+      };
+      spy(mock, 'parse');
+      var result = new Parser(fixture);
+      result.parse_topLevel(mock.parse);
+
+      expect(mock.parse).to.have.been.callCount(115);
+    });
+  });
+
   // describe('parse_atom', () => {
   //   it('calls parse_questestinterop', () => {
   //     var result = new Parser(tokenizer);
