@@ -230,5 +230,6 @@ describe('Parser', () => {
   });
 
   describe('parse_questestinterop', () => {});
+  describe('parse_assessment', () => {});
 
 });

@@ -16,10 +16,6 @@ export default class Parser{
     this.input = $($.parseXML(qti))[0].childNodes;
   }
 
-  parse(){
-    this.parse_topLevel((current) => this.parse_atom(current));
-  }
-
   parse_topLevel(parse){
     var qti = [];
 
@@ -53,6 +49,10 @@ export default class Parser{
         debugger;
         throw new Error(`${this.current.type} is not yet supported!`);
     }
+  }
+
+  parse(){
+    this.parse_topLevel((current) => this.parse_atom(current));
   }
 
   parse_questestinterop(current){
