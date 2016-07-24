@@ -206,11 +206,6 @@ describe('Parser', () => {
     });
   });
 
-  describe('next', () => {
-    var result = new Parser(fixture);
-    //TODO
-  });
-
   describe('parse_topLevel', () => {
     it('calls parse with every item', () => {
       var mock = {
@@ -233,6 +228,7 @@ describe('Parser', () => {
       } catch(e){}
       expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
     });
-
   });
+
+  // describe('parse_questestinterop', () => {});
 });
