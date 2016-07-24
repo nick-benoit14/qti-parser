@@ -211,7 +211,7 @@ describe('Parser', () => {
     //TODO
   });
 
-  xdescribe('parse_topLevel', () => {
+  describe('parse_topLevel', () => {
     it('calls parse with every item', () => {
       var mock = {
         parse: () => {}
@@ -220,7 +220,7 @@ describe('Parser', () => {
       var result = new Parser(fixture);
       result.parse_topLevel(mock.parse);
 
-      expect(mock.parse).to.have.been.callCount(115);
+      expect(mock.parse).to.have.been.callCount(1);
     });
   });
 

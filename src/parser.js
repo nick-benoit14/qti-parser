@@ -9,9 +9,10 @@ export default class Parser{
     this.counts = {}
     this.input = $($.parseXML(qti))[0].childNodes;
     this.current = this.input[0];
+    this.currentIndex = 0;
   }
 
-//TODO abstract next 
+//TODO abstract next
   next(){}
 
   parse(){
@@ -20,8 +21,11 @@ export default class Parser{
 
   parse_topLevel(parse){
     var qti = [];
-    while(this.current = this.input.next()){
+    
+    while(this.current){
       qti.push(parse());
+
+      this.current = this.input[++this.currentIndex];
     }
 
     return {
