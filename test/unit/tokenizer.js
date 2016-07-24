@@ -225,8 +225,41 @@ describe('Tokenizer', () => {
       for(var i = 0; i < tokenizer.nodes.length; i++){
         expect(tokenizer.next()).not.equal(undefined);
       }
-      var result = tokenizer.next();  
+      var result = tokenizer.next();
       expect(result).equal(undefined);
+    });
+  });
+
+  describe('each', () => {
+    var tokenizer,
+    nodes;
+    beforeEach(() => {
+      nodes = nodeList[0].childNodes;
+      tokenizer = new Tokenizer(nodes);
+    });
+
+    it('iterates over each element', () => {
+      var mock = {
+        handleNode: () => {}
+      };
+      spy(mock, 'handleNode');
+      tokenizer.each(mock.handleNode);
+
+      expect(mock.handleNode).to.have.been.callCount(nodes.length);
+    });
+
+    it('doesnt create key for empty value', () => {
+       var result = tokenizer.each(() => []);
+       expect(_.keys(result).length).equal(0);
+    });
+
+    it('creates key for valid value', () => {
+      var result = tokenizer.each(() => ['howdy']);
+      var nodeNames = [];
+      for(var i = 0; i < nodes.length; i++)
+        nodeNames.push(nodes[i].nodeName);
+
+      expect(_.keys(result)).eql(_.uniq(nodeNames));
     });
   });
 
