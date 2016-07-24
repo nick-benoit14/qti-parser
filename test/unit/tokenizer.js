@@ -190,7 +190,7 @@ var fixture = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 
 
-describe('Tokenizer', () => {
+xdescribe('Tokenizer', () => {
   describe('constructor', () => {
     it('parses xml', () => {
       var subject = new Tokenizer(fixture);

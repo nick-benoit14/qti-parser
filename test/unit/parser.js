@@ -1,5 +1,6 @@
 import Tokenizer from '../../src/tokenizer';
 import Parser from '../../src/parser';
+import { Grammar } from '../../src/parser';
 
 var fixture = `<?xml version="1.0" encoding="UTF-8"?>
 <questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/ims_qtiasiv1p2 http://www.imsglobal.org/xsd/ims_qtiasiv1p2p1.xsd">
@@ -193,40 +194,39 @@ var fixture = `<?xml version="1.0" encoding="UTF-8"?>
 
 var tokenizer;
 describe('Parser', () => {
-  beforeEach(() => {
-    tokenizer = new Tokenizer(fixture);
-  });
 
   describe('constructor', () => {
     it('initializes values', () => {
-      var result = new Parser(tokenizer);
+      var result = new Parser(fixture);
+
       expect(Object.keys(result.counts).length).equal(0);
-      expect(result.input).equal(tokenizer);
+      expect(result.input.length).equal(1);
+      expect(result.input[0].nodeName).equal(Grammar.questestinterop);
     });
   });
 
-  describe('parse_topLevel', () => {
-    it('calls parse with every item', () => {
-      var mock = {
-        parse: () => {}
-      };
-      spy(mock, 'parse');
-      var result = new Parser(tokenizer);
-      result.parse_topLevel(mock.parse);
-
-      expect(mock.parse).to.have.been.callCount(115);
-    });
-  });
-
-  describe('parse_atom', () => {
-    it('calls parse_questestinterop', () => {
-      var result = new Parser(tokenizer);
-      spy(Parser.prototype, 'parse_questestinterop');
-      try{
-        result.parse();
-      } catch(e){}
-      expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
-    });
-
-  });
+  // describe('parse_topLevel', () => {
+  //   it('calls parse with every item', () => {
+  //     var mock = {
+  //       parse: () => {}
+  //     };
+  //     spy(mock, 'parse');
+  //     var result = new Parser(tokenizer);
+  //     result.parse_topLevel(mock.parse);
+  //
+  //     expect(mock.parse).to.have.been.callCount(115);
+  //   });
+  // });
+  //
+  // describe('parse_atom', () => {
+  //   it('calls parse_questestinterop', () => {
+  //     var result = new Parser(tokenizer);
+  //     spy(Parser.prototype, 'parse_questestinterop');
+  //     try{
+  //       result.parse();
+  //     } catch(e){}
+  //     expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
+  //   });
+  //
+  // });
 });

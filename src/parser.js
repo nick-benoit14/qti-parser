@@ -1,13 +1,13 @@
-import Tokenizer from './tokenizer';
+import $ from 'jquery';
 
 export const Grammar = {
   questestinterop: 'questestinterop'
 }
 
 export default class Parser{
-  constructor(input){
+  constructor(qti){
     this.counts = {}
-    this.input = input;
+    this.input = $($.parseXML(qti))[0].childNodes;
   }
 
   parse(){
