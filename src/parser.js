@@ -8,7 +8,9 @@ export const Grammar = {
   qtimetadata: 'qtimetadata',
   section: 'section',
   item: 'item',
-  itemmetadata: 'itemmetadata'
+  itemmetadata: 'itemmetadata',
+  presentation: 'presentation',
+  resprocessing: 'resprocessing'
 };
 
 export default class Parser{
@@ -50,6 +52,12 @@ export default class Parser{
       case Grammar.item:
         return this.parse_item(current);
         break;
+      case Grammar.itemmetadata:
+        break;
+      case Grammar.presentation:
+        break;
+      case Grammar.resprocessing:
+        break;
       default:
         debugger;
         throw new Error(`${this.current.type} is not yet supported!`);
@@ -88,9 +96,15 @@ export default class Parser{
     var tokens = new Tokenizer(current.childNodes);
     var item = tokens.each((val) => this.parse_atom(val));
     item.type = Grammar.item;
-    debugger;
 
     return item;
   }
 
+
+  // parse_presentation(current){}
+  // parse_material(){}
+  // parse_mattext(){}
+  // parse_response_lid(){}
+  // parse_render_choice(){}
+  // parse_response_label(){}
 };
