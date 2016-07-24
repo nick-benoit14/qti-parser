@@ -218,7 +218,7 @@ describe('Parser', () => {
     });
   });
 
-  describe('parse_atom', () => {
+  describe.only('parse_atom', () => {
     it('calls parse_questestinterop', () => {
       var result = new Parser(fixture);
       spy(Parser.prototype, 'parse_questestinterop');
@@ -229,5 +229,7 @@ describe('Parser', () => {
     });
   });
 
-  // describe('parse_questestinterop', () => {});
+  describe('parse_questestinterop', () => {
+    // it('iterates over all elements')
+  });
 });

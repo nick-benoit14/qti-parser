@@ -33,20 +33,31 @@ export default class Parser{
   parse_atom(current){
     switch (current.nodeName) {
       case Grammar.questestinterop:
-        return this.parse_questestinterop();
+        return this.parse_questestinterop(current);
         break;
       default:
        throw new Error(`${this.current.type} is not yet supported!`);
     }
   }
 
-  parse_questestinterop(){
-    // Find matching pair
-    // while() valid element do things
+  parse_questestinterop(current){
     var questestinterop = {
       type:Grammar.questestinterop,
-
     };
+
+    var tokens = new Tokenizer(current.childNodes);
+    var node;
+
+    while(node = tokens.next()){
+      var val = parse_atom(node);
+      if(val.length > 0){
+        if(!questestinterop[node.nodeName]){
+          questestinterop[node.nodeName] = [];
+        }
+        questestinterop[node.nodeName].push(val);
+      }
+    }
+
     return {};
   }
 
