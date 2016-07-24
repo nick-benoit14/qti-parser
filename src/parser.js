@@ -4,7 +4,10 @@ import Tokenizer from './tokenizer';
 export const Grammar = {
   questestinterop: 'questestinterop',
   text: '#text',
-  assessment: 'assessment'
+  assessment: 'assessment',
+  qtimetadata: 'qtimetadata',
+  section: 'section'
+
 }
 
 export default class Parser{
@@ -40,6 +43,11 @@ export default class Parser{
       case Grammar.text:
         break;
       case Grammar.assessment:
+        return this.parse_assessment(current);
+        break;
+      case Grammar.qtimetadata:
+        break;
+      case Grammar.section:
         break;
       default:
         debugger;
@@ -55,12 +63,12 @@ export default class Parser{
     return questestinterop;
   }
 
-  parse_assessment(){
-    return {
-      title:"",
-      ident:0,
-      section:[]
-    }
+  parse_assessment(current){
+    var tokens = new Tokenizer(current.childNodes);
+    var assessment = tokens.each((val) => this.parse_atom(val));
+    assessment.type = Grammar.assessment;
+
+    return assessment;
   }
   parse_section(){}
   parse_item(){}
