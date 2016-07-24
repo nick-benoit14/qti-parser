@@ -1,4 +1,5 @@
 import Tokenizer from '../../src/tokenizer';
+import $ from 'jquery';
 
 var fixture = `<?xml version="1.0" encoding="UTF-8"?>
 <questestinterop xmlns="http://www.imsglobal.org/xsd/ims_qtiasiv1p2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/ims_qtiasiv1p2 http://www.imsglobal.org/xsd/ims_qtiasiv1p2p1.xsd">
@@ -189,27 +190,27 @@ var fixture = `<?xml version="1.0" encoding="UTF-8"?>
 </questestinterop>
 `;
 
+var tokenizer,
+  nodeList;
+describe('Tokenizer', () => {
 
-xdescribe('Tokenizer', () => {
+  beforeEach(() => {
+    nodeList = $($.parseXML(fixture))[0].childNodes;
+    tokenizer = new Tokenizer(nodeList);
+  });
+
   describe('constructor', () => {
-    it('parses xml', () => {
-      var subject = new Tokenizer(fixture);
-
-      expect(subject.xml.jquery).not.equal(undefined);
-      expect(subject.xml.length).equal(115);
-    });
-
     it('initializes current index', () => {
-      var subject = new Tokenizer(fixture);
-      expect(subject.currentIndex).equal(0);
+      expect(tokenizer.currentIndex).equal(0);
+      expect(tokenizer.nodes).equal(nodeList);
     });
   });
+
   describe('next', () => {
     it('handles empty returns next element', () => {
-      var tokenizer = new Tokenizer(fixture);
       var result = tokenizer.next();
 
-      expect(result.type).equal('questestinterop');
+      expect(result.nodeName).equal('questestinterop');
     });
 
     it('increments currentIndex', () => {
@@ -221,12 +222,10 @@ xdescribe('Tokenizer', () => {
     });
 
     it('returns undefined when we are out of elements', () => {
-      var tokenizer = new Tokenizer(fixture);
-
-      for(var i = 0; i < tokenizer.xml.length; i++){
+      for(var i = 0; i < tokenizer.nodes.length; i++){
         expect(tokenizer.next()).not.equal(undefined);
       }
-      var result = tokenizer.next();
+      var result = tokenizer.next();  
       expect(result).equal(undefined);
     });
   });
