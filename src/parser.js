@@ -13,6 +13,10 @@ export const Grammar = {
   resprocessing: 'resprocessing'
 };
 
+export const Parse = {
+  questestinterop: (current) => {}
+};
+
 export default class Parser{
   constructor(qti){
     this.counts = {}
@@ -35,21 +39,22 @@ export default class Parser{
   }
 
   parse_atom(current){
-    return this._parse_tag(current);
+    return this._parse_tag(current, Parse);
   }
 
   parse(){
     this.parse_topLevel((current) => this.parse_atom(current));
   }
 
-  _parse_tag(current){
+  _parse_tag(current, parseMethods){
     var tokens = new Tokenizer(current.childNodes);
     var item = tokens.each((val) => this.parse_atom(val));
     var name = _.replace(current.nodeName, '#', '_');
     item.type = Grammar[name];
+    if(parseMethods[name]){
+      _.merge(item, parseMethods[name](current));
+    }
     if(!item.type){
-      // debugger;
-      // throw new Error(`${current.nodeName} is not yet supported!`);
       console.error(`${current.nodeName} is not yet supported!`);
     }
 
