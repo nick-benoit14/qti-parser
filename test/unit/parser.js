@@ -219,16 +219,33 @@ describe('Parser', () => {
   });
 
   describe('parse_atom', () => {
-    it('calls parse_questestinterop', () => {
+    it('parses recursively', () => {
       var result = new Parser(fixture);
-      spy(Parser.prototype, 'parse_questestinterop');
-      try{
-        result.parse();
-      } catch(e){}
-      expect(Parser.prototype.parse_questestinterop).to.have.been.calledOnce;
+      result.parse();
+      //TODO add actual spec, this is basically being used to run dev environment
     });
   });
 
-  describe('parse_questestinterop', () => {});
+  describe('_parse_tag', () => {
+    it('it calls parse method if exists', () => {
+      var result = new Parser(fixture);
+      var parseMethods = {
+        assessment: () => {}
+      };
+      spy(parseMethods, 'assessment');
+      result._parse_tag(result.input[0].childNodes[1], parseMethods);
+      expect(parseMethods.assessment).to.have.been.callCount(1);
+    });
+
+    it('merges parse method return', () => {
+      var parser = new Parser(fixture);
+      var parseMethods = {
+        assessment: () => ({a:'a', b:'b'})
+      };
+      spy(parseMethods, 'assessment');
+      var result = parser._parse_tag(parser.input[0].childNodes[1], parseMethods);
+      expect(result).to.include.keys('a', 'b');
+    });
+  });
 
 });

@@ -3,18 +3,24 @@ import Tokenizer from './tokenizer';
 
 export const Grammar = {
   questestinterop: 'questestinterop',
-  text: '#text',
-  assessment: 'assessment'
-}
+  _text: '_text',
+  assessment: 'assessment',
+  qtimetadata: 'qtimetadata',
+  section: 'section',
+  item: 'item',
+  itemmetadata: 'itemmetadata',
+  presentation: 'presentation',
+  resprocessing: 'resprocessing'
+};
+
+export const Parse = {
+  questestinterop: (current) => {}
+};
 
 export default class Parser{
   constructor(qti){
     this.counts = {}
     this.input = $($.parseXML(qti))[0].childNodes;
-  }
-
-  parse(){
-    this.parse_topLevel((current) => this.parse_atom(current));
   }
 
   parse_topLevel(parse){
@@ -33,36 +39,25 @@ export default class Parser{
   }
 
   parse_atom(current){
-    switch (current.nodeName) {
-      case Grammar.questestinterop:
-        return this.parse_questestinterop(current);
-        break;
-      case Grammar.text:
-        break;
-      case Grammar.assessment:
-        break;
-      default:
-        debugger;
-        throw new Error(`${this.current.type} is not yet supported!`);
-    }
+    return this._parse_tag(current, Parse);
   }
 
-  parse_questestinterop(current){
+  parse(){
+    this.parse_topLevel((current) => this.parse_atom(current));
+  }
+
+  _parse_tag(current, parseMethods){
     var tokens = new Tokenizer(current.childNodes);
-    var questestinterop = tokens.each((val) => this.parse_atom(val));
-    questestinterop.type = Grammar.questestinterop;
-
-    return questestinterop;
-  }
-
-  parse_assessment(){
-    return {
-      title:"",
-      ident:0,
-      section:[]
+    var item = tokens.each((val) => this.parse_atom(val));
+    var name = _.replace(current.nodeName, '#', '_');
+    item.type = Grammar[name];
+    if(parseMethods[name]){
+      _.merge(item, parseMethods[name](current));
     }
-  }
-  parse_section(){}
-  parse_item(){}
+    if(!item.type){
+      console.error(`${current.nodeName} is not yet supported!`);
+    }
 
+    return item;
+  }
 };
