@@ -246,6 +246,12 @@ describe('Parser', () => {
       var result = parser._parse_tag(parser.input[0].childNodes[1], parseMethods);
       expect(result).to.include.keys('a', 'b');
     });
+
+    it('adds node attributes as keys', () => {
+      var parser = new Parser(fixture);
+      var result = parser._parse_tag(parser.input[0].childNodes[1], {});
+      expect(result).to.include.keys('ident', 'title');
+    });
   });
 
 });

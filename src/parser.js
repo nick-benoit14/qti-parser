@@ -10,11 +10,20 @@ export const Grammar = {
   item: 'item',
   itemmetadata: 'itemmetadata',
   presentation: 'presentation',
-  resprocessing: 'resprocessing'
+  resprocessing: 'resprocessing',
+  outcomes: 'outcomes',
+  decvar: 'decvar',
+  respcondition: 'respcondition',
+  conditionvar: 'conditionvar',
+  varequal: 'varequal'
 };
 
 export const Parse = {
-  questestinterop: (current) => {}
+  questestinterop: (current) => {},
+  item: (current) => {},
+  resprocessing: (current, item) => {
+    // debugger;
+  }
 };
 
 export default class Parser{
@@ -50,9 +59,16 @@ export default class Parser{
     var tokens = new Tokenizer(current.childNodes);
     var item = tokens.each((val) => this.parse_atom(val));
     var name = _.replace(current.nodeName, '#', '_');
+
+    if(current.attributes){
+      for(var i = 0; i < current.attributes.length; i++){
+        item[current.attributes[i].name] = current.attributes[i].value;
+      }
+    }
+    
     item.type = Grammar[name];
     if(parseMethods[name]){
-      _.merge(item, parseMethods[name](current));
+      _.merge(item, parseMethods[name](current, item));
     }
     if(!item.type){
       console.error(`${current.nodeName} is not yet supported!`);
