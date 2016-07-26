@@ -24,11 +24,18 @@ export const Parse = {
   _text: (current) => ({value: current.nodeValue}),
   resprocessing: (current, item) => {
 
+    function parse_varequal(expression){
+      return {
+        left: expression.respident,
+        right: expression['#text'][0].value,
+        operator: "=="
+      };
+    }
 
     function parseBinaryExpression(expression){
       switch (expression.type) {
         case 'varequal':
-          debugger;
+          return parse_varequal(expression);
           break;
         default:
          throw new Error(`${expression.type} not supported by resprocessing`);
