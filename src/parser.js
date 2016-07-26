@@ -21,8 +21,41 @@ export const Grammar = {
 export const Parse = {
   questestinterop: (current) => {},
   item: (current) => {},
+  _text: (current) => ({value: current.nodeValue}),
   resprocessing: (current, item) => {
-    // debugger;
+
+    function parseExpression(conditionvar){
+      conditionvar[0].varequal.forEach((equal) => {
+        debugger;
+      });
+    }
+    function parseBlock(){}
+
+    var prog = [];
+
+    item.outcomes[0].decvar.forEach((_var) => {
+      prog.push({
+        type:'variableDeclaration',
+        identifier:_var.varname || 'SCORE',
+        value: _var.defaultval || 0
+      });
+    });
+
+    item.respcondition.forEach((condition) => {
+      prog.push({
+        type:"ifStatement",
+        condition: parseExpression(condition.conditionvar),
+        then: parseBlock()
+      });
+    });
+
+    debugger;
+    // Parse into ast
+    // Interpreter function
+
+    // return {
+      // checkAnswer()
+    // }
   }
 };
 
@@ -65,7 +98,7 @@ export default class Parser{
         item[current.attributes[i].name] = current.attributes[i].value;
       }
     }
-    
+
     item.type = Grammar[name];
     if(parseMethods[name]){
       _.merge(item, parseMethods[name](current, item));
