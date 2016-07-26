@@ -24,10 +24,25 @@ export const Parse = {
   _text: (current) => ({value: current.nodeValue}),
   resprocessing: (current, item) => {
 
+
+    function parseBinaryExpression(expression){
+      switch (expression.type) {
+        case 'varequal':
+          debugger;
+          break;
+        default:
+         throw new Error(`${expression.type} not supported by resprocessing`);
+      }
+    }
+
     function parseExpression(conditionvar){
-      conditionvar[0].varequal.forEach((equal) => {
-        debugger;
-      });
+      if(conditionvar[0].varequal[0]){
+        return parseBinaryExpression(conditionvar[0].varequal[0]);
+      }
+
+      conditionvar[0].and.forEach((equal) => {});
+      conditionvar[0].not.forEach((equal) => {});
+      conditionvar[0].or.forEach((equal) => {});
     }
     function parseBlock(){}
 
