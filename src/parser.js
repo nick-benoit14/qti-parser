@@ -26,6 +26,7 @@ export const Parse = {
 
     function parse_varequal(expression){
       return {
+        type: "binaryExpression",
         left: expression.respident,
         right: expression['#text'][0].value,
         operator: "=="
@@ -51,7 +52,25 @@ export const Parse = {
       conditionvar[0].not.forEach((equal) => {});
       conditionvar[0].or.forEach((equal) => {});
     }
-    function parseBlock(){}
+
+    function parseBlock(condition){
+      var block = [];
+      if(condition.setvar){
+        condition.setvar.forEach((_var) => {
+          block.push({
+            type: "assignmentExpression",
+            left: _var.varname,
+            right: _var['#text'][0].value
+          });
+        });
+      }
+      //TODO support display feedback
+
+      return {
+        type:'block',
+        block
+      };
+    }
 
     var prog = [];
 
@@ -67,17 +86,16 @@ export const Parse = {
       prog.push({
         type:"ifStatement",
         condition: parseExpression(condition.conditionvar),
-        then: parseBlock()
+        then: parseBlock(condition)
       });
     });
 
-    debugger;
     // Parse into ast
     // Interpreter function
 
-    // return {
-      // checkAnswer()
-    // }
+    return {
+      // checkAnswer: evaluate(prog, env)
+    }
   }
 };
 
