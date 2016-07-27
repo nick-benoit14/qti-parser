@@ -21,8 +21,82 @@ export const Grammar = {
 export const Parse = {
   questestinterop: (current) => {},
   item: (current) => {},
+  _text: (current) => ({value: current.nodeValue}),
   resprocessing: (current, item) => {
-    // debugger;
+
+    function parse_varequal(expression){
+      return {
+        type: "binaryExpression",
+        left: expression.respident,
+        right: expression['#text'][0].value,
+        operator: "=="
+      };
+    }
+
+    function parseBinaryExpression(expression){
+      switch (expression.type) {
+        case 'varequal':
+          return parse_varequal(expression);
+          break;
+        default:
+         throw new Error(`${expression.type} not supported by resprocessing`);
+      }
+    }
+
+    function parseExpression(conditionvar){
+      if(conditionvar[0].varequal[0]){
+        return parseBinaryExpression(conditionvar[0].varequal[0]);
+      }
+
+      conditionvar[0].and.forEach((equal) => {});
+      conditionvar[0].not.forEach((equal) => {});
+      conditionvar[0].or.forEach((equal) => {});
+    }
+
+    function parseBlock(condition){
+      var block = [];
+      if(condition.setvar){
+        condition.setvar.forEach((_var) => {
+          block.push({
+            type: "assignmentExpression",
+            left: _var.varname,
+            right: _var['#text'][0].value
+          });
+        });
+      }
+      //TODO support display feedback
+
+      return {
+        type:'block',
+        block
+      };
+    }
+
+    
+
+    var prog = [];
+    item.outcomes[0].decvar.forEach((_var) => {
+      prog.push({
+        type:'variableDeclaration',
+        identifier:_var.varname || 'SCORE',
+        value: _var.defaultval || 0
+      });
+    });
+
+    item.respcondition.forEach((condition) => {
+      prog.push({
+        type:"ifStatement",
+        condition: parseExpression(condition.conditionvar),
+        then: parseBlock(condition)
+      });
+    });
+
+    // Parse into ast
+    // Interpreter function
+
+    return {
+      // checkAnswer: evaluate(prog, env)
+    }
   }
 };
 
@@ -65,7 +139,7 @@ export default class Parser{
         item[current.attributes[i].name] = current.attributes[i].value;
       }
     }
-    
+
     item.type = Grammar[name];
     if(parseMethods[name]){
       _.merge(item, parseMethods[name](current, item));
