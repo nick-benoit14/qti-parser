@@ -72,8 +72,9 @@ export const Parse = {
       };
     }
 
-    var prog = [];
+    
 
+    var prog = [];
     item.outcomes[0].decvar.forEach((_var) => {
       prog.push({
         type:'variableDeclaration',
