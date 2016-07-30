@@ -4,8 +4,14 @@
     static parse_varequal(expression){
       return {
         type: "binaryExpression",
-        left: expression.respident,
-        right: expression['#text'][0].value,
+        left: {
+          type: 'identifier',
+          value: expression.respident
+        },
+        right: {
+          type: 'literal',
+          value: expression['#text'][0].value,
+        },
         operator: "=="
       };
     }
@@ -21,10 +27,13 @@
     }
 
     static parseExpression(conditionvar){
+
+      // Return if we find a terminal value
       if(conditionvar[0].varequal[0]){
         return RespParser.parseBinaryExpression(conditionvar[0].varequal[0]);
       }
 
+      // Recursively evaluate if we find a logical operator
       conditionvar[0].and.forEach((equal) => {});
       conditionvar[0].not.forEach((equal) => {});
       conditionvar[0].or.forEach((equal) => {});
@@ -36,13 +45,17 @@
         condition.setvar.forEach((_var) => {
           block.push({
             type: "assignmentExpression",
-            left: _var.varname,
-            right: _var['#text'][0].value
+            left: {
+              type: 'identifier',
+              value: _var.varname
+            },
+            right: {
+              type: 'literal',
+              value: _var['#text'][0].value
+            }
           });
         });
       }
-      //TODO support display feedback
-
       return {
         type:'block',
         block
@@ -51,6 +64,14 @@
 
     static evaluate(expression, env){
       switch (expression.type) {
+        case 'identifier':
+          if(env[expression.value]){return expression.value;}
+          throw new Error(`${expression.value} is not defined!`);
+          break;
+        case 'literal':
+          return expression.value;
+          break;
+
         case 'variableDeclaration':
           env[expression.identifier] = expression.value;
           break;
@@ -59,8 +80,11 @@
             RespParser.evaluate(expression.then, env);
           }
         case 'binaryExpression':
+          var identifier = RespParser.evaluate(expression.left, env);
           if(expression.operator == '=='){
-            return env[expression.left] == parseInt(expression.right);
+            if(env[identifier]){
+              return env[identifier] == RespParser.evaluate(expression.right, env);
+            }
           }
           break;
         case 'block':
@@ -69,13 +93,17 @@
           });
           break;
         case 'assignmentExpression':
-          env[expression.left] = parseInt(expression.right);
-          //TODO evaluate right side expression
+          env[RespParser.evaluate(expression.left, env)] = RespParser.evaluate(expression.right, env);
           break;
         default:
 
       }
     }
+
+    // static evaluateExpression(expression){
+    //
+    //   return val;
+    // }
 
     static parse(current, item){
       var prog = [];
