@@ -63,17 +63,20 @@
     }
 
     static evaluate(expression, env){
+      debugger;
       switch (expression.type) {
         case 'identifier':
-          if(env[expression.value]){return expression.value;}
-          throw new Error(`${expression.value} is not defined!`);
+          if(env[expression.value] === undefined){
+            throw new Error(`${expression.value} is not defined!`);
+          }
+          return expression.value;
           break;
         case 'literal':
           return expression.value;
           break;
 
         case 'variableDeclaration':
-          env[expression.identifier] = expression.value;
+          env[expression.left.value] = RespParser.evaluate(expression.right, env);
           break;
         case 'ifStatement':
           if(RespParser.evaluate(expression.condition, env)){
@@ -110,8 +113,14 @@
       item.outcomes[0].decvar.forEach((_var) => {
         prog.push({
           type:'variableDeclaration',
-          identifier:_var.varname || 'SCORE',
-          value: _var.defaultval || 0
+          left: {
+            type: 'identifier',
+            value: _var.varname || 'SCORE',
+          },
+          right: {
+            type: 'literal',
+            value: _var.defaultval || 0
+          },
         });
       });
 
