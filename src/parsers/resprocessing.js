@@ -63,7 +63,6 @@
     }
 
     static evaluate(expression, env){
-      debugger;
       switch (expression.type) {
         case 'identifier':
           if(env[expression.value] === undefined){
@@ -82,6 +81,7 @@
           if(RespParser.evaluate(expression.condition, env)){
             RespParser.evaluate(expression.then, env);
           }
+          break;
         case 'binaryExpression':
           var identifier = RespParser.evaluate(expression.left, env);
           if(expression.operator == '=='){
@@ -99,14 +99,9 @@
           env[RespParser.evaluate(expression.left, env)] = RespParser.evaluate(expression.right, env);
           break;
         default:
-
+        throw new Error('Token is not Recognized!');
       }
     }
-
-    // static evaluateExpression(expression){
-    //
-    //   return val;
-    // }
 
     static parse(current, item){
       var prog = [];
