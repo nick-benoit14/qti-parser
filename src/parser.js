@@ -72,7 +72,9 @@ export default class Parser{
       _.merge(item, parseMethods[name](current, item));
     }
 
-    if(item.type == Grammar.resprocessing) debugger;
+    if(item.type == Grammar.resprocessing){
+      debugger; //HACK
+    }
 
     if(!item.type){
       console.error(`${current.nodeName} is not yet supported!`);

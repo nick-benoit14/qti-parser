@@ -70,6 +70,7 @@
           }
           return expression.value;
           break;
+
         case 'literal':
           return expression.value;
           break;
@@ -77,11 +78,13 @@
         case 'variableDeclaration':
           env[expression.left.value] = RespParser.evaluate(expression.right, env);
           break;
+
         case 'ifStatement':
           if(RespParser.evaluate(expression.condition, env)){
             RespParser.evaluate(expression.then, env);
           }
           break;
+
         case 'binaryExpression':
           var identifier = RespParser.evaluate(expression.left, env);
           if(expression.operator == '=='){
@@ -90,14 +93,17 @@
             }
           }
           break;
+
         case 'block':
           expression.block.forEach((exp) => {
             RespParser.evaluate(exp, env);
           });
           break;
+
         case 'assignmentExpression':
           env[RespParser.evaluate(expression.left, env)] = RespParser.evaluate(expression.right, env);
           break;
+          
         default:
         throw new Error('Token is not Recognized!');
       }
