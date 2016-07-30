@@ -219,7 +219,7 @@ describe('Parser', () => {
   });
 
   describe('parse_atom', () => {
-    it('parses recursively', () => {
+    it.only('parses recursively', () => {
       var result = new Parser(fixture);
       result.parse();
       //TODO add actual spec, this is basically being used to run dev environment

@@ -72,7 +72,33 @@ export const Parse = {
       };
     }
 
-    
+    function evaluate(expression, env){
+      switch (expression.type) {
+        case 'variableDeclaration':
+          env[expression.identifier] = expression.value;
+          break;
+        case 'ifStatement':
+          if(evaluate(expression.condition, env)){
+            evaluate(expression.then, env);
+          }
+        case 'binaryExpression':
+          if(expression.operator == '=='){
+            return env[expression.left] == parseInt(expression.right);
+          }
+          break;
+        case 'block':
+          expression.block.forEach((exp) => {
+            evaluate(exp, env);
+          });
+          break;
+        case 'assignmentExpression':
+          env[expression.left] = parseInt(expression.right);
+          //TODO evaluate right side expression
+          break;
+        default:
+
+      }
+    }
 
     var prog = [];
     item.outcomes[0].decvar.forEach((_var) => {
@@ -91,11 +117,16 @@ export const Parse = {
       });
     });
 
-    // Parse into ast
-    // Interpreter function
+    const checkAnswers = (answers) => {
+      evaluate({
+        type: 'block',
+        block: prog
+      }, answers);
+      return answers;
+    }
 
     return {
-      // checkAnswer: evaluate(prog, env)
+      checkAnswers
     }
   }
 };
@@ -144,6 +175,9 @@ export default class Parser{
     if(parseMethods[name]){
       _.merge(item, parseMethods[name](current, item));
     }
+
+    if(item.type == Grammar.resprocessing) debugger;
+
     if(!item.type){
       console.error(`${current.nodeName} is not yet supported!`);
     }
