@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import Tokenizer from './tokenizer';
 
+import ResprocessingParser from './parsers/resprocessing';
+
 export const Grammar = {
   questestinterop: 'questestinterop',
   _text: '_text',
@@ -22,113 +24,7 @@ export const Parse = {
   questestinterop: (current) => {},
   item: (current) => {},
   _text: (current) => ({value: current.nodeValue}),
-  resprocessing: (current, item) => {
-
-    function parse_varequal(expression){
-      return {
-        type: "binaryExpression",
-        left: expression.respident,
-        right: expression['#text'][0].value,
-        operator: "=="
-      };
-    }
-
-    function parseBinaryExpression(expression){
-      switch (expression.type) {
-        case 'varequal':
-          return parse_varequal(expression);
-          break;
-        default:
-         throw new Error(`${expression.type} not supported by resprocessing`);
-      }
-    }
-
-    function parseExpression(conditionvar){
-      if(conditionvar[0].varequal[0]){
-        return parseBinaryExpression(conditionvar[0].varequal[0]);
-      }
-
-      conditionvar[0].and.forEach((equal) => {});
-      conditionvar[0].not.forEach((equal) => {});
-      conditionvar[0].or.forEach((equal) => {});
-    }
-
-    function parseBlock(condition){
-      var block = [];
-      if(condition.setvar){
-        condition.setvar.forEach((_var) => {
-          block.push({
-            type: "assignmentExpression",
-            left: _var.varname,
-            right: _var['#text'][0].value
-          });
-        });
-      }
-      //TODO support display feedback
-
-      return {
-        type:'block',
-        block
-      };
-    }
-
-    function evaluate(expression, env){
-      switch (expression.type) {
-        case 'variableDeclaration':
-          env[expression.identifier] = expression.value;
-          break;
-        case 'ifStatement':
-          if(evaluate(expression.condition, env)){
-            evaluate(expression.then, env);
-          }
-        case 'binaryExpression':
-          if(expression.operator == '=='){
-            return env[expression.left] == parseInt(expression.right);
-          }
-          break;
-        case 'block':
-          expression.block.forEach((exp) => {
-            evaluate(exp, env);
-          });
-          break;
-        case 'assignmentExpression':
-          env[expression.left] = parseInt(expression.right);
-          //TODO evaluate right side expression
-          break;
-        default:
-
-      }
-    }
-
-    var prog = [];
-    item.outcomes[0].decvar.forEach((_var) => {
-      prog.push({
-        type:'variableDeclaration',
-        identifier:_var.varname || 'SCORE',
-        value: _var.defaultval || 0
-      });
-    });
-
-    item.respcondition.forEach((condition) => {
-      prog.push({
-        type:"ifStatement",
-        condition: parseExpression(condition.conditionvar),
-        then: parseBlock(condition)
-      });
-    });
-
-    const checkAnswers = (answers) => {
-      evaluate({
-        type: 'block',
-        block: prog
-      }, answers);
-      return answers;
-    }
-
-    return {
-      checkAnswers
-    }
-  }
+  resprocessing: ResprocessingParser.parse
 };
 
 export default class Parser{
