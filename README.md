@@ -1,6 +1,6 @@
 # qti-parser
 
-Parse all of the QTI!
+Parse all of the QTI! Experiment with QTI and recursive descent parsers.
 
 [![Travis build status](http://img.shields.io/travis/nick-benoit14/qti-parser.svg?style=flat)](https://travis-ci.org/nick-benoit14/qti-parser)
 [![Code Climate](https://codeclimate.com/github/nick-benoit14/qti-parser/badges/gpa.svg)](https://codeclimate.com/github/nick-benoit14/qti-parser)
